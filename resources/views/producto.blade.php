@@ -25,8 +25,9 @@
             background-color: #1a1a1a;
             padding: 20px 0;
             text-align: center;
+            position: relative;
         }
-
+        
         header h1 {
             font-size: 2.5em;
             color: #990033;
@@ -43,6 +44,15 @@
 
         header a:hover {
             color: #990033;
+        }
+        
+        .cart-link {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ff3366;
+            font-size: 1.2em;
         }
 
         .product-detail-container {
@@ -154,8 +164,9 @@
 
     <header>
         <div class="container">
-            <a href="{{ url('/') }}">TechZone</a>
-            <p>El poder del juego en tus manos</p>
+            <a href="{{ url('/tienda') }}">Volver a la tienda</a>
+            <h1>TechZone</h1>
+            <a href="{{ url('/carrito') }}" class="cart-link">Carrito ({{ count(session('carrito', [])) }})</a>
         </div>
     </header>
 
@@ -167,7 +178,7 @@
 
             <div class="product-info">
                 <h2>{{ $producto['nombre'] }}</h2>
-                <div class="price">{{ $producto['precio'] }}</div>
+                <div class="price">{{ $producto['precio_formateado'] }}</div>
                 <p>{{ $producto['descripcion_larga'] }}</p>
                 
                 <h3>Especificaciones:</h3>
@@ -176,7 +187,12 @@
                         <li><strong>{{ $especificacion }}:</strong> {{ $valor }}</li>
                     @endforeach
                 </ul>
-                <button class="buy-button">Añadir al carrito</button>
+                
+                <form action="{{ url('/carrito/agregar') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $producto['id'] }}">
+                    <button type="submit" class="buy-button">Añadir al carrito</button>
+                </form>
             </div>
         </div>
         

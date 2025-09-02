@@ -6,7 +6,6 @@
     <title>Tienda - TechZone</title>
     
     <style>
-        /* Reutilizamos el mismo CSS de la landing para consistencia */
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
@@ -25,6 +24,7 @@
             background-color: #1a1a1a;
             padding: 20px 0;
             text-align: center;
+            position: relative;
         }
         
         header a {
@@ -37,7 +37,16 @@
         header a:hover {
             color: #990033;
         }
-
+        
+        .cart-link {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ff3366;
+            font-size: 1.2em;
+        }
+        
         header h1 {
             font-size: 2.5em;
             color: #990033;
@@ -134,37 +143,35 @@
 
     <header>
         <div class="container">
-            <a href="{{ url('/') }}">TechZone</a>
+            <a href="{{ url('/') }}">Volver al inicio</a>
             <h1>Nuestra Tienda</h1>
+            <a href="{{ url('/carrito') }}" class="cart-link">Carrito ({{ count(session('carrito', [])) }})</a>
         </div>
     </header>
 
     <main>
         <div class="container">
+            @if(session('success'))
+                <div style="background-color: #4CAF50; color: white; padding: 15px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
+                    {{ session('success') }}
+                </div>
+            @endif
+            
             <div class="product-grid">
-                @php
-                $productos_tienda = [
-                    ['id' => 1, 'nombre' => 'PC Gamer Élite', 'descripcion_corta' => 'Intel Core i9, RTX 4080, 32GB RAM', 'precio' => '$2,500', 'imagen' => 'https://images.unsplash.com/photo-1629864275069-1c9f029392e2?q=80&w=2670&auto=format&fit=crop'],
-                    ['id' => 2, 'nombre' => 'Audífonos Razer Kraken', 'descripcion_corta' => 'Sonido 7.1 envolvente, micrófono retráctil', 'precio' => '$95', 'imagen' => 'https://images.unsplash.com/photo-1601931846564-96fe744318c3?q=80&w=2940&auto=format&fit=crop'],
-                    ['id' => 3, 'nombre' => 'Teclado Ducky One 3', 'descripcion_corta' => 'Switches Cherry MX Brown, PBT keycaps', 'precio' => '$150', 'imagen' => 'https://images.unsplash.com/photo-1618296213702-8a9d16a50352?q=80&w=2940&auto=format&fit=crop'],
-                    ['id' => 4, 'nombre' => 'PC Gamer X2', 'descripcion_corta' => 'Intel Core i7, RTX 3070', 'precio' => '$1,500', 'imagen' => 'https://images.unsplash.com/photo-1616071424168-d05051ed7a5d?q=80&w=2940&auto=format&fit=crop'],
-                    ['id' => 5, 'nombre' => 'Laptop Gaming', 'descripcion_corta' => 'AMD Ryzen 9, RTX 3080', 'precio' => '$1,900', 'imagen' => 'https://images.unsplash.com/photo-1593642702749-bf2a97097072?q=80&w=2940&auto=format&fit=crop'],
-                    ['id' => 6, 'nombre' => 'Mouse Logitech G502', 'descripcion_corta' => '11 botones programables', 'precio' => '$60', 'imagen' => 'https://images.unsplash.com/photo-1615617265935-7171d9d40a25?q=80&w=2940&auto=format&fit=crop'],
-                    ['id' => 7, 'nombre' => 'Monitor Gaming', 'descripcion_corta' => '27 pulgadas, 144Hz', 'precio' => '$250', 'imagen' => 'https://images.unsplash.com/photo-1593642702749-bf2a97097072?q=80&w=2940&auto=format&fit=crop'],
-                    ['id' => 8, 'nombre' => 'Silla Gamer', 'descripcion_corta' => 'Ergonómica, reclinable', 'precio' => '$180', 'imagen' => 'https://images.unsplash.com/photo-1629864275069-1c9f029392e2?q=80&w=2670&auto=format&fit=crop']
-                ];
-                @endphp
-                
-                @foreach ($productos_tienda as $producto)
-                    <a href="{{ url('/productos/' . $producto['id']) }}" class="product-link">
-                        <div class="product-card">
+                @foreach ($productos as $producto)
+                    <div class="product-card">
+                        <a href="{{ url('/productos/' . $producto['id']) }}" class="product-link">
                             <img src="{{ $producto['imagen'] }}" alt="{{ $producto['nombre'] }}">
                             <h4>{{ $producto['nombre'] }}</h4>
                             <p>{{ $producto['descripcion_corta'] }}</p>
-                            <span>{{ $producto['precio'] }}</span>
-                            <button class="buy-button">Comprar</button>
-                        </div>
-                    </a>
+                            <span>{{ $producto['precio_formateado'] }}</span>
+                        </a>
+                        <form action="{{ url('/carrito/agregar') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id" value="{{ $producto['id'] }}">
+                            <button type="submit" class="buy-button">Añadir al carrito</button>
+                        </form>
+                    </div>
                 @endforeach
             </div>
         </div>
