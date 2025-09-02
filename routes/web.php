@@ -3,18 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-// Product Catalog (fictional data)
+// Catálogo de productos (datos ficticios)
 $productos = [
     1 => [
         'id' => 1,
@@ -164,12 +153,17 @@ $productos = [
     ]
 ];
 
-// Main route now shows the product list.
-Route::get('/', function () use ($productos) {
+// Ruta de la landing page (página de bienvenida)
+Route::get('/', function () {
+    return view('welcome');
+});
+
+// Ruta de la tienda (catálogo de productos)
+Route::get('/tienda', function () use ($productos) {
     return view('tienda', ['productos' => $productos]);
 });
 
-// Route for product details.
+// Ruta para el detalle de un producto
 Route::get('/productos/{id}', function ($id) use ($productos) {
     $producto = $productos[$id] ?? null;
 
@@ -180,7 +174,7 @@ Route::get('/productos/{id}', function ($id) use ($productos) {
     return view('producto', ['producto' => $producto]);
 });
 
-// Route to add a product to the cart.
+// Ruta para añadir un producto al carrito
 Route::post('/carrito/agregar', function (Request $request) use ($productos) {
     $id = $request->input('id');
     $producto = $productos[$id] ?? null;
@@ -206,7 +200,7 @@ Route::post('/carrito/agregar', function (Request $request) use ($productos) {
     return redirect()->back()->with('success', 'Producto añadido al carrito.');
 });
 
-// Route to remove a product from the cart.
+// Ruta para quitar un producto del carrito
 Route::post('/carrito/quitar', function (Request $request) {
     $id = $request->input('id');
 
@@ -220,7 +214,7 @@ Route::post('/carrito/quitar', function (Request $request) {
     return redirect()->back()->with('success', 'Producto eliminado del carrito.');
 });
 
-// Route to show the shopping cart.
+// Ruta para mostrar el carrito de compras
 Route::get('/carrito', function () {
     $carrito = session()->get('carrito', []);
     $total = 0;
