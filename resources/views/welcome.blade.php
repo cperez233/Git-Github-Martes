@@ -8,11 +8,11 @@
     <style>
         /* Estilos generales */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #121212;
-            color: #e0e0e0;
+            background-color: #0d0d0d;
+            color: #f0f0f0;
         }
 
         .container {
@@ -23,43 +23,65 @@
 
         /* Header */
         header {
-            background-color: #1f1f1f;
+            background-color: #1a1a1a;
             padding: 40px 0;
             text-align: center;
         }
 
         header h1 {
-            font-size: 3em;
-            color: #00ff66;
+            font-size: 3.5em;
+            color: #990033;
             margin: 0;
         }
 
         /* Sección principal (hero) */
         .hero-section {
+            position: relative;
             text-align: center;
             padding: 100px 20px;
-            background-color: #2c2c2c;
+            background: url('https://images.unsplash.com/photo-1542751371-adc954848d0e?q=80&w=2940&auto=format&fit=crop') no-repeat center center/cover;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-section h2, .hero-section p, .hero-section a {
+            position: relative;
+            z-index: 1;
         }
 
         .hero-section h2 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            color: #fff;
+            font-size: 3em;
+            margin-bottom: 15px;
         }
 
         .cta-button {
-            background-color: #00ff66;
-            color: #121212;
+            background-color: #990033;
+            color: #fff;
             padding: 15px 30px;
             border: none;
             border-radius: 5px;
             font-size: 1.2em;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
         }
 
         .cta-button:hover {
-            background-color: #00cc55;
+            background-color: #660022;
         }
 
         /* Productos destacados */
@@ -69,9 +91,9 @@
         }
 
         .featured-products h3 {
-            font-size: 2em;
+            font-size: 2.5em;
             margin-bottom: 40px;
-            color: #fff;
+            color: #f0f0f0;
         }
 
         .product-grid {
@@ -82,28 +104,30 @@
         }
 
         .product-card {
-            background-color: #1f1f1f;
+            background-color: #1a1a1a;
             border-radius: 10px;
             padding: 20px;
             width: 300px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .product-card:hover {
             transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(153, 0, 51, 0.4);
         }
 
         .product-card img {
             max-width: 100%;
             border-radius: 8px;
             margin-bottom: 15px;
+            border: 2px solid #990033;
         }
 
         .product-card h4 {
             margin: 0;
             font-size: 1.2em;
-            color: #00ff66;
+            color: #ff3366;
         }
 
         .product-card p {
@@ -121,7 +145,7 @@
 
         /* Footer */
         footer {
-            background-color: #1f1f1f;
+            background-color: #1a1a1a;
             text-align: center;
             padding: 20px 0;
             margin-top: 50px;
@@ -148,7 +172,7 @@
             <div class="container">
                 <h2>Computadoras y accesorios para gamers</h2>
                 <p>Equípate con lo mejor para dominar cualquier campo de batalla. 🔥</p>
-                <button id="cta-button" class="cta-button">Ver productos</button>
+                <a href="{{ url('/tienda') }}" class="cta-button">Ver productos</a>
             </div>
         </section>
 
@@ -157,25 +181,24 @@
                 <h3>Productos destacados</h3>
                 <div class="product-grid">
                     @php
-                    // En un proyecto real, aquí iría la lógica para obtener productos de una base de datos
                     $productos = [
                         [
-                            'nombre' => 'PC Gamer X1',
-                            'descripcion' => 'Intel Core i7, RTX 3060, 16GB RAM',
-                            'precio' => '$1,200',
-                            'imagen' => 'https://via.placeholder.com/300x200'
+                            'nombre' => 'PC Gamer Élite',
+                            'descripcion' => 'Intel Core i9, RTX 4080, 32GB RAM',
+                            'precio' => '$2,500',
+                            'imagen' => 'https://images.unsplash.com/photo-1629864275069-1c9f029392e2?q=80&w=2670&auto=format&fit=crop'
                         ],
                         [
-                            'nombre' => 'Audífonos HyperX',
-                            'descripcion' => 'Sonido envolvente 7.1, micrófono con cancelación de ruido',
-                            'precio' => '$80',
-                            'imagen' => 'https://via.placeholder.com/300x200'
+                            'nombre' => 'Audífonos Razer Kraken',
+                            'descripcion' => 'Sonido 7.1 envolvente, micrófono retráctil',
+                            'precio' => '$95',
+                            'imagen' => 'https://images.unsplash.com/photo-1601931846564-96fe744318c3?q=80&w=2940&auto=format&fit=crop'
                         ],
                         [
-                            'nombre' => 'Teclado Mecánico RGB',
-                            'descripcion' => 'Switches Cherry MX, iluminación personalizable',
-                            'precio' => '$110',
-                            'imagen' => 'https://via.placeholder.com/300x200'
+                            'nombre' => 'Teclado Ducky One 3',
+                            'descripcion' => 'Switches Cherry MX Brown, PBT keycaps',
+                            'precio' => '$150',
+                            'imagen' => 'https://images.unsplash.com/photo-1618296213702-8a9d16a50352?q=80&w=2940&auto=format&fit=crop'
                         ]
                     ];
                     @endphp
